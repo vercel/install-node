@@ -10,19 +10,19 @@ GREEN="\033[32m"
 MAGENTA="\033[35m"
 NO_COLOR="\033[0m"
 
-function info() {
+info() {
   printf "${CYAN}*${NO_COLOR} $@\n"
 }
 
-function error() {
-  printf "${RED}x${NO_COLOR} $@\n"
+error() {
+  printf "${RED}x${NO_COLOR} $@\n" >&2
 }
 
-function complete() {
+complete() {
   printf "${GREEN}!${NO_COLOR} $@\n"
 }
 
-function fetch() {
+fetch() {
   if hash curl 2>/dev/null; then
     curl --silent "$1"
   else
@@ -35,7 +35,7 @@ function fetch() {
   fi
 }
 
-function resolve_node_version() {
+resolve_node_version() {
   local tag="$1"
   if [ "${tag}" = "latest" ]; then
     tag=
@@ -47,7 +47,7 @@ function resolve_node_version() {
 #   - darwin
 #   - linux
 #   - linux_musl
-function detect_platform() {
+detect_platform() {
   local platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
   # check for MUSL
@@ -62,7 +62,7 @@ function detect_platform() {
 
 # Currently known to support:
 #   - x64
-function detect_arch() {
+detect_arch() {
   # TODO: add arm, ppc, etc. support
   local arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
@@ -73,7 +73,7 @@ function detect_arch() {
   echo "${arch}"
 }
 
-function confirm() {
+confirm() {
   printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
   read yn
   if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
