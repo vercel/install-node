@@ -1,14 +1,14 @@
 #!/bin/sh
 set -e
 
-BOLD="\033[1m"
-UNDERLINE="\033[4m"
-RED="\033[31m"
-BLUE="\033[34m"
-CYAN="\033[36m"
-GREEN="\033[32m"
-MAGENTA="\033[35m"
-NO_COLOR="\033[0m"
+BOLD="$(tput bold || echo '')"
+UNDERLINE="$(tput smul || echo '')"
+RED="$(tput setaf 1 || echo '')"
+GREEN="$(tput setaf 2 || echo '')"
+BLUE="$(tput setaf 4 || echo '')"
+MAGENTA="$(tput setaf 5 || echo '')"
+CYAN="$(tput setaf 6 || echo '')"
+NO_COLOR="$(tput sgr0 || echo '')"
 
 info() {
   printf "${CYAN}*${NO_COLOR} $@\n"
