@@ -148,17 +148,17 @@ fi
 # Resolve the requested version tag into an existing Node.js version
 RESOLVED="$(resolve_node_version "$VERSION")"
 if [ -z "${RESOLVED}" ]; then
-  error "Could not resolve Node.js version \"${VERSION}\""
+  error "Could not resolve Node.js version ${MAGENTA}${VERSION}${NO_COLOR}"
   exit 1
 fi
 if [ "$VERSION" != "$RESOLVED" ]; then
-  info "Resolved \"$VERSION\" to \"$RESOLVED\""
+  info "Resolved ${MAGENTA}${VERSION}${NO_COLOR} to ${BOLD}${MAGENTA}${RESOLVED}${NO_COLOR}"
 fi
 
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 
-confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${GREEN}${PREFIX}${NO_COLOR}?"
+confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
 
 fetch "${URL}" \
   | tar xzf${VERBOSE} - \
