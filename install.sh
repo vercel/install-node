@@ -83,30 +83,53 @@ confirm() {
 }
 
 # defaults
-printf "   ${UNDERLINE}Configuration${NO_COLOR}\n"
 if [ -z "${VERSION}" ]; then
   VERSION=latest
 fi
-info "${BOLD}Version${NO_COLOR}:  ${VERSION}"
 
 if [ -z "${PREFIX}" ]; then
   PREFIX=/usr/local
 fi
-info "${BOLD}Prefix${NO_COLOR}:   ${PREFIX}"
 
 if [ -z "${PLATFORM}" ]; then
   PLATFORM="$(detect_platform)"
 fi
-info "${BOLD}Platform${NO_COLOR}: ${PLATFORM}"
 
 if [ -z "${ARCH}" ]; then
   ARCH="$(detect_arch)"
 fi
-info "${BOLD}Arch${NO_COLOR}:     ${ARCH}"
 
 if [ -z "${BASE_URL}" ]; then
   BASE_URL="https://nodejs.org/dist"
 fi
+
+# parse argv variables
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -v) VERSION="$2"; shift 2;;
+    -V) VERBOSE=1; shift 1;;
+    -p) PLATFORM="$2"; shift 2;;
+    -P) PREFIX="$2"; shift 2;;
+    -a) ARCH="$2"; shift 2;;
+    -b) BASE_URL="$2"; shift 2;;
+
+    --version=*) VERSION="${1#*=}"; shift 1;;
+    --verbose) VERBOSE=1; shift 1;;
+    --verbose=*) VERBOSE="${1#*=}"; shift 1;;
+    --platform=*) PLATFORM="${1#*=}"; shift 1;;
+    --prefix=*) PREFIX="${1#*=}"; shift 1;;
+    --base-url=*) BASE_URL="${1#*=}"; shift 1;;
+    --version|--prefix|--platform|--arch|--base-url) echo "$1 requires an argument" >&2; exit 1;;
+
+    *) errror "Unknown option: $1" >&2; exit 1;;
+  esac
+done
+
+printf "   ${UNDERLINE}Configuration${NO_COLOR}\n"
+info "${BOLD}Version${NO_COLOR}:  ${VERSION}"
+info "${BOLD}Prefix${NO_COLOR}:   ${PREFIX}"
+info "${BOLD}Platform${NO_COLOR}: ${PLATFORM}"
+info "${BOLD}Arch${NO_COLOR}:     ${ARCH}"
 
 # non-empty VERBOSE enabled verbose untarring
 if [ ! -z "${VERBOSE}" ]; then
