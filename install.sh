@@ -60,7 +60,7 @@ resolve_node_version() {
 # Currently known to support:
 #   - darwin
 #   - linux
-#   - linux_musl
+#   - linux_musl (Alpine)
 detect_platform() {
   local platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
@@ -75,9 +75,9 @@ detect_platform() {
 }
 
 # Currently known to support:
-#   - x64
+#   - x64 (x86_64)
+#   - armv7l (Raspbian on Pi 3)
 detect_arch() {
-  # TODO: add arm, ppc, etc. support
   local arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
   if [ "${arch}" = "x86_64" ]; then
