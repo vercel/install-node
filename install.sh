@@ -1,17 +1,28 @@
 #!/bin/sh
+# `install-node.now.sh` is a simple one-liner shell script to
+# install official Node.js binaries from `nodejs.org/dist` or other
+# blessed sources (i.e. Alpine Linux builds are not on nodejs.org)
 #
 # For `latest` Node.js version:
 #
 #   $ curl -sL install-node.now.sh | sh
 #
-# Install a specific version:
+# Install a specific version (ex: v8.9.0):
 #
-#   $ curl -sL install-node.now.sh | sh -s -- --target=8.9.0
+#   $ curl -sL install-node.now.sh/8.9.0 | sh
 #
-# Semver also works, so for example `v4.x`:
+# Semver also works (ex: v4.x.x):
 #
-#   $ curl -sL install-node.now.sh | sh -s -- --target=4.x
+#   $ curl -sL install-node.now.sh/4 | sh
 #
+# Options may be passed to the shell script with `-s --`:
+#
+#   $ curl -sL install-node.now.sh | sh -s -- --prefix=$HOME --version=8 --verbose
+#   $ curl -sL install-node.now.sh | sh -s -- -P $HOME -v 8 -V
+#
+# Patches welcome!
+# https://github.com/zeit/install-node
+# Nathan Rajlich <nate@zeit.co>
 
 set -e
 
