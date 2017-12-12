@@ -1,0 +1,16 @@
+{
+  "name": "install-node.now.sh",
+  "version": "1.0.0",
+  "description": "Node.js install sh script",
+  "scripts": {
+    "start": "micro server.js"
+  },
+  "author": "Nathan Rajlich <nate@zeit.co>",
+  "license": "MIT",
+  "dependencies": {
+    "micro": "^9.0.2"
+  },
+  "now": {
+    "alias": "install-node.now.sh"
+  }
+}
