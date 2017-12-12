@@ -179,12 +179,6 @@ fi
 
 echo
 
-# Alpine Linux binaries get downloaded from `nodejs-binaries.zeit.sh`
-# TODO: we can download Windows v5.12.0 .zip file from here too
-if [ "$PLATFORM" = "linux_musl" ]; then
-  BASE_URL="https://nodejs-binaries.zeit.sh"
-fi
-
 # Resolve the requested version tag into an existing Node.js version
 RESOLVED="$(resolve_node_version "$VERSION")"
 if [ -z "${RESOLVED}" ]; then
@@ -193,6 +187,11 @@ if [ -z "${RESOLVED}" ]; then
 fi
 if [ "$VERSION" != "$RESOLVED" ]; then
   info "Resolved ${MAGENTA}${VERSION}${NO_COLOR} to ${BOLD}${MAGENTA}${RESOLVED}${NO_COLOR}"
+fi
+
+# Alpine Linux binaries get downloaded from `nodejs-binaries.zeit.sh`
+if [ "$PLATFORM" = "linux_musl" -o \( "$PLATFORM" = "win" -a "$RESOLVED" = "v5.12.0" \)]; then
+  BASE_URL="https://nodejs-binaries.zeit.sh"
 fi
 
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
