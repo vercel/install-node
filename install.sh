@@ -121,19 +121,20 @@ fi
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -v) VERSION="$2"; shift 2;;
-    -V) VERBOSE=1; shift 1;;
     -p) PLATFORM="$2"; shift 2;;
     -P) PREFIX="$2"; shift 2;;
     -a) ARCH="$2"; shift 2;;
     -b) BASE_URL="$2"; shift 2;;
 
     --version=*) VERSION="${1#*=}"; shift 1;;
-    --verbose) VERBOSE=1; shift 1;;
     --verbose=*) VERBOSE="${1#*=}"; shift 1;;
     --platform=*) PLATFORM="${1#*=}"; shift 1;;
     --prefix=*) PREFIX="${1#*=}"; shift 1;;
     --base-url=*) BASE_URL="${1#*=}"; shift 1;;
     --version|--prefix|--platform|--arch|--base-url) echo "$1 requires an argument" >&2; exit 1;;
+
+    --verbose|-V) VERBOSE=1; shift 1;;
+    --force|--yes|-f|-y) FORCE=1; shift 1;;
 
     *) errror "Unknown option: $1" >&2; exit 1;;
   esac
@@ -145,7 +146,7 @@ info "${BOLD}Prefix${NO_COLOR}:   ${PREFIX}"
 info "${BOLD}Platform${NO_COLOR}: ${PLATFORM}"
 info "${BOLD}Arch${NO_COLOR}:     ${ARCH}"
 
-# non-empty VERBOSE enabled verbose untarring
+# non-empty VERBOSE enables verbose untarring
 if [ ! -z "${VERBOSE}" ]; then
   VERBOSE=v
   info "${BOLD}Verbose${NO_COLOR}: yes"
@@ -172,7 +173,11 @@ fi
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 
-confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
+if [ -z "${FORCE}" ]; then
+  confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
+fi
+
+info "Installing Node.js, please wait…"
 
 fetch "${URL}" \
   | tar xzf${VERBOSE} - \
