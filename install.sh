@@ -1,4 +1,18 @@
 #!/bin/sh
+#
+# For `latest` Node.js version:
+#
+#   $ curl -sL install-node.now.sh | sh
+#
+# Install a specific version:
+#
+#   $ curl -sL install-node.now.sh | sh -s -- --target=8.9.0
+#
+# Semver also works, so for example `v4.x`:
+#
+#   $ curl -sL install-node.now.sh | sh -s -- --target=4.x
+#
+
 set -e
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
