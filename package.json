@@ -1,7 +1,7 @@
 {
-  "name": "install-node.now.sh",
+  "name": "install-node",
   "version": "1.0.0",
-  "description": "Node.js install sh script",
+  "description": "Node.js one-liner install shell script",
   "scripts": {
     "start": "micro server.js"
   },
