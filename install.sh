@@ -114,9 +114,16 @@ detect_arch() {
 
 confirm() {
   printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
-  read yn < /dev/tty
+  set +e
+  read yn < /dev/tty 2>/dev/null
+  rc=$?
+  set -e
+  if [ $rc -ne 0 ]; then
+    error "Error reading from prompt (please re-run with the \`--yes\` option)"
+    exit 1
+  fi
   if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-    error "Aborting (please answer \"yes\" to continue)…"
+    error "Aborting (please answer \"yes\" to continue)"
     exit 1
   fi
 }
@@ -197,7 +204,7 @@ fi
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 
-if [ -z "${FORCE}" -a \( -t 0 -o -e /dev/tty \) ]; then
+if [ -z "${FORCE}" ]; then
   confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
 fi
 
