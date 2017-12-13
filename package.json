@@ -11,6 +11,11 @@
     "micro": "^9.0.2"
   },
   "now": {
-    "alias": "install-node.now.sh"
+    "type": "npm",
+    "alias": "install-node.now.sh",
+    "files": [
+      "server.js",
+      "install.sh"
+    ]
   }
 }
