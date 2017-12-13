@@ -179,15 +179,15 @@ if [ -z "${RESOLVED}" ]; then
   exit 1
 fi
 
-PRETTY_VERSION="$RESOLVED"
+PRETTY_VERSION="${GREEN}${RESOLVED}${NO_COLOR}"
 if [ "$RESOLVED" != "v$(echo "$VERSION" | sed 's/^v//')" ]; then
   PRETTY_VERSION="$PRETTY_VERSION (resolved from ${CYAN}${VERSION}${NO_COLOR})"
 fi
 printf "   ${UNDERLINE}Configuration${NO_COLOR}\n"
 info "${BOLD}Version${NO_COLOR}:  ${PRETTY_VERSION}"
-info "${BOLD}Prefix${NO_COLOR}:   ${PREFIX}"
-info "${BOLD}Platform${NO_COLOR}: ${PLATFORM}"
-info "${BOLD}Arch${NO_COLOR}:     ${ARCH}"
+info "${BOLD}Prefix${NO_COLOR}:   ${GREEN}${PREFIX}${NO_COLOR}"
+info "${BOLD}Platform${NO_COLOR}: ${GREEN}${PLATFORM}${NO_COLOR}"
+info "${BOLD}Arch${NO_COLOR}:     ${GREEN}${ARCH}${NO_COLOR}"
 
 # non-empty VERBOSE enables verbose untarring
 if [ ! -z "${VERBOSE}" ]; then
