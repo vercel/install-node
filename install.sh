@@ -119,7 +119,7 @@ confirm() {
   fi
   printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
   set +e
-  read yn < /dev/tty 2>/dev/null
+  read yn < /dev/tty
   rc=$?
   set -e
   if [ $rc -ne 0 ]; then
@@ -172,7 +172,7 @@ while [ "$#" -gt 0 ]; do
     --verbose|-V) VERBOSE=1; shift 1;;
     --force|--yes|-f|-y) FORCE=1; shift 1;;
 
-    *) errror "Unknown option: $1" >&2; exit 1;;
+    *) errror "Unknown option: $1"; exit 1;;
   esac
 done
 
@@ -187,7 +187,7 @@ PRETTY_VERSION="${GREEN}${RESOLVED}${NO_COLOR}"
 if [ "$RESOLVED" != "v$(echo "$VERSION" | sed 's/^v//')" ]; then
   PRETTY_VERSION="$PRETTY_VERSION (resolved from ${CYAN}${VERSION}${NO_COLOR})"
 fi
-printf "   ${UNDERLINE}Configuration${NO_COLOR}\n"
+printf "  ${UNDERLINE}Configuration${NO_COLOR}\n"
 info "${BOLD}Version${NO_COLOR}:  ${PRETTY_VERSION}"
 info "${BOLD}Prefix${NO_COLOR}:   ${GREEN}${PREFIX}${NO_COLOR}"
 info "${BOLD}Platform${NO_COLOR}: ${GREEN}${PLATFORM}${NO_COLOR}"
