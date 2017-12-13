@@ -27,6 +27,7 @@
 set -e
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
+GREY="$(tput setaf 0 2>/dev/null || echo '')"
 UNDERLINE="$(tput smul 2>/dev/null || echo '')"
 RED="$(tput setaf 1 2>/dev/null || echo '')"
 GREEN="$(tput setaf 2 2>/dev/null || echo '')"
@@ -36,7 +37,7 @@ CYAN="$(tput setaf 6 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
 info() {
-  printf "${CYAN}*${NO_COLOR} $@\n"
+  printf "${GREY}>${NO_COLOR} $@\n"
 }
 
 error() {
