@@ -172,8 +172,19 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
+# Resolve the requested version tag into an existing Node.js version
+RESOLVED="$(resolve_node_version "$VERSION")"
+if [ -z "${RESOLVED}" ]; then
+  error "Could not resolve Node.js version ${MAGENTA}${VERSION}${NO_COLOR}"
+  exit 1
+fi
+
+PRETTY_VERSION="$RESOLVED"
+if [ "$RESOLVED" != "v$(echo "$VERSION" | sed 's/^v//')" ]; then
+  PRETTY_VERSION="$PRETTY_VERSION (resolved from ${CYAN}${VERSION}${NO_COLOR})"
+fi
 printf "   ${UNDERLINE}Configuration${NO_COLOR}\n"
-info "${BOLD}Version${NO_COLOR}:  ${VERSION}"
+info "${BOLD}Version${NO_COLOR}:  ${PRETTY_VERSION}"
 info "${BOLD}Prefix${NO_COLOR}:   ${PREFIX}"
 info "${BOLD}Platform${NO_COLOR}: ${PLATFORM}"
 info "${BOLD}Arch${NO_COLOR}:     ${ARCH}"
@@ -185,16 +196,6 @@ if [ ! -z "${VERBOSE}" ]; then
 fi
 
 echo
-
-# Resolve the requested version tag into an existing Node.js version
-RESOLVED="$(resolve_node_version "$VERSION")"
-if [ -z "${RESOLVED}" ]; then
-  error "Could not resolve Node.js version ${MAGENTA}${VERSION}${NO_COLOR}"
-  exit 1
-fi
-if [ "$VERSION" != "$RESOLVED" ]; then
-  info "Resolved ${MAGENTA}${VERSION}${NO_COLOR} to ${BOLD}${MAGENTA}${RESOLVED}${NO_COLOR}"
-fi
 
 # Alpine Linux binaries get downloaded from `nodejs-binaries.zeit.sh`
 if [ "$PLATFORM" = "linux_musl" -o \( "$PLATFORM" = "win" -a "$RESOLVED" = "v5.12.0" \) ]; then
