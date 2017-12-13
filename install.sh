@@ -190,7 +190,7 @@ if [ "$VERSION" != "$RESOLVED" ]; then
 fi
 
 # Alpine Linux binaries get downloaded from `nodejs-binaries.zeit.sh`
-if [ "$PLATFORM" = "linux_musl" -o \( "$PLATFORM" = "win" -a "$RESOLVED" = "v5.12.0" \)]; then
+if [ "$PLATFORM" = "linux_musl" -o \( "$PLATFORM" = "win" -a "$RESOLVED" = "v5.12.0" \) ]; then
   BASE_URL="https://nodejs-binaries.zeit.sh"
 fi
 
