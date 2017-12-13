@@ -114,6 +114,9 @@ detect_arch() {
 }
 
 confirm() {
+  if [ ! -z "${FORCE}" ]; then
+    exit 0
+  fi
   printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
   set +e
   read yn < /dev/tty 2>/dev/null
@@ -206,9 +209,7 @@ fi
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 
-if [ -z "${FORCE}" ]; then
-  confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
-fi
+confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
 
 info "Installing Node.js, please wait…"
 
