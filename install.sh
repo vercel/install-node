@@ -159,23 +159,25 @@ fi
 # parse argv variables
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -v) VERSION="$2"; shift 2;;
-    -p) PLATFORM="$2"; shift 2;;
-    -P) PREFIX="$2"; shift 2;;
-    -a) ARCH="$2"; shift 2;;
-    -b) BASE_URL="$2"; shift 2;;
+    -v|--version) VERSION="$2"; shift 2;;
+    -p|--platform) PLATFORM="$2"; shift 2;;
+    -P|--prefix) PREFIX="$2"; shift 2;;
+    -a|--arch) ARCH="$2"; shift 2;;
+    -b|--base-url) BASE_URL="$2"; shift 2;;
 
-    --version=*) VERSION="${1#*=}"; shift 1;;
-    --verbose=*) VERBOSE="${1#*=}"; shift 1;;
-    --platform=*) PLATFORM="${1#*=}"; shift 1;;
-    --prefix=*) PREFIX="${1#*=}"; shift 1;;
-    --base-url=*) BASE_URL="${1#*=}"; shift 1;;
-    --version|--prefix|--platform|--arch|--base-url) echo "$1 requires an argument" >&2; exit 1;;
+    -V|--verbose) VERBOSE=1; shift 1;;
+    -f|-y|--force|--yes) FORCE=1; shift 1;;
 
-    --verbose|-V) VERBOSE=1; shift 1;;
-    --force|--yes|-f|-y) FORCE=1; shift 1;;
+    -v=*|--version=*) VERSION="${1#*=}"; shift 1;;
+    -p=*|--platform=*) PLATFORM="${1#*=}"; shift 1;;
+    -P=*|--prefix=*) PREFIX="${1#*=}"; shift 1;;
+    -a=*|--arch=*) ARCH="${1#*=}"; shift 1;;
+    -b=*|--base-url=*) BASE_URL="${1#*=}"; shift 1;;
+    -V=*|--verbose=*) VERBOSE="${1#*=}"; shift 1;;
+    -f=*|-y=*|--force=*|--yes=*) FORCE="${1#*=}"; shift 1;;
 
-    *) errror "Unknown option: $1"; exit 1;;
+    -*) errror "Unknown option: $1"; exit 1;;
+    *) VERSION="$1"; shift 1;;
   esac
 done
 
