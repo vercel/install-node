@@ -3,13 +3,17 @@
 # install official Node.js binaries from `nodejs.org/dist` or other
 # blessed sources (i.e. Alpine Linux builds are not on nodejs.org)
 #
-# For `latest` Node.js version:
+# For newest Node.js version:
 #
 #   $ curl -sL install-node.now.sh | sh
+
+# For latest LTS Node.js version:
+#
+#   $ curl -sL install-node.now.sh/lts | sh
 #
 # Install a specific version (ex: v8.9.0):
 #
-#   $ curl -sL install-node.now.sh/8.9.0 | sh
+#   $ curl -sL install-node.now.sh/v8.9.0 | sh
 #
 # Semver also works (ex: v4.x.x):
 #
