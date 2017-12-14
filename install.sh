@@ -118,21 +118,20 @@ detect_arch() {
 }
 
 confirm() {
-  if [ ! -z "${FORCE}" ]; then
-    exit 0
-  fi
-  printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
-  set +e
-  read yn < /dev/tty
-  rc=$?
-  set -e
-  if [ $rc -ne 0 ]; then
-    error "Error reading from prompt (please re-run with the \`--yes\` option)"
-    exit 1
-  fi
-  if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-    error "Aborting (please answer \"yes\" to continue)"
-    exit 1
+  if [ -z "${FORCE}" ]; then
+    printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
+    set +e
+    read yn < /dev/tty
+    rc=$?
+    set -e
+    if [ $rc -ne 0 ]; then
+      error "Error reading from prompt (please re-run with the \`--yes\` option)"
+      exit 1
+    fi
+    if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
+      error "Aborting (please answer \"yes\" to continue)"
+      exit 1
+    fi
   fi
 }
 
