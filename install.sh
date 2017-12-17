@@ -100,10 +100,14 @@ detect_platform() {
   local platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
   # check for MUSL
-  if [ "$platform" = "linux" ]; then
+  if [ "${platform}" = "linux" ]; then
     if ldd /bin/sh | grep -i musl >/dev/null; then
-      platform="linux_musl"
+      platform=linux_musl
     fi
+  fi
+
+  if [ ${platform:0:5} = "mingw" ]; then
+    platform=win
   fi
 
   echo "${platform}"
@@ -160,12 +164,12 @@ if [ -z "${VERSION}" ]; then
   VERSION=latest
 fi
 
-if [ -z "${PREFIX}" ]; then
-  PREFIX=/usr/local
-fi
-
 if [ -z "${PLATFORM}" ]; then
   PLATFORM="$(detect_platform)"
+fi
+
+if [ -z "${PREFIX}" ]; then
+  PREFIX=/usr/local
 fi
 
 if [ -z "${ARCH}" ]; then
@@ -231,6 +235,11 @@ if [ "$PLATFORM" = "linux_musl" -o \( "$PLATFORM" = "win" -a "$RESOLVED" = "v5.1
   BASE_URL="https://nodejs-binaries.zeit.sh"
 fi
 
+EXT=tar.gz
+if [ "${PLATFORM}" = win ]; then
+  EXT=zip
+fi
+
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 check_prefix "${PREFIX}"
@@ -238,12 +247,22 @@ confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREF
 
 info "Installing Node.js, please wait…"
 
-fetch "${URL}" \
-  | tar xzf${VERBOSE} - \
-    --exclude CHANGELOG.md \
-    --exclude LICENSE \
-    --exclude README.md \
-    --strip-components 1 \
-    -C "${PREFIX}"
+if [ "${EXT}" = zip ]; then
+  fetch "${URL}" \
+    | tar xzf${VERBOSE} - \
+      --exclude CHANGELOG.md \
+      --exclude LICENSE \
+      --exclude README.md \
+      --strip-components 1 \
+      -C "${PREFIX}"
+else
+  fetch "${URL}" \
+    | tar xzf${VERBOSE} - \
+      --exclude CHANGELOG.md \
+      --exclude LICENSE \
+      --exclude README.md \
+      --strip-components 1 \
+      -C "${PREFIX}"
+fi
 
 complete "Done"
