@@ -35,21 +35,26 @@ GREY="$(tput setaf 0 2>/dev/null || echo '')"
 UNDERLINE="$(tput smul 2>/dev/null || echo '')"
 RED="$(tput setaf 1 2>/dev/null || echo '')"
 GREEN="$(tput setaf 2 2>/dev/null || echo '')"
+YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
 BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 CYAN="$(tput setaf 6 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
 info() {
-  printf "${GREY}>${NO_COLOR} $@\n"
+  printf "${BOLD}${GREY}>${NO_COLOR} $@\n"
+}
+
+warn() {
+  printf "${YELLOW}! $@${NO_COLOR}\n"
 }
 
 error() {
-  printf "${RED}x${NO_COLOR} $@\n" >&2
+  printf "${RED}x $@${NO_COLOR}\n" >&2
 }
 
 complete() {
-  printf "${GREEN}!${NO_COLOR} $@\n"
+  printf "${GREEN}✓${NO_COLOR} $@\n"
 }
 
 fetch() {
@@ -135,6 +140,21 @@ confirm() {
   fi
 }
 
+check_prefix() {
+  local warn=1
+  local bin="$1/bin"
+  IFS=':' read -ra PATHS <<<"$(echo "$PATH")"
+  for i in "${PATHS[@]}"; do
+    if [ "${i}" = "${bin}" ]; then
+      warn=0
+    fi
+  done
+
+  if [ "${warn}" -eq 1 ]; then
+    warn "Prefix bin directory ${bin} is not in your \$PATH"
+  fi
+}
+
 # defaults
 if [ -z "${VERSION}" ]; then
   VERSION=latest
@@ -213,7 +233,7 @@ fi
 
 URL="${BASE_URL}/${RESOLVED}/node-${RESOLVED}-${PLATFORM}-${ARCH}.tar.gz"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
-
+check_prefix "${PREFIX}"
 confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
 
 info "Installing Node.js, please wait…"
