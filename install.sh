@@ -200,7 +200,7 @@ while [ "$#" -gt 0 ]; do
     -V=*|--verbose=*) VERBOSE="${1#*=}"; shift 1;;
     -f=*|-y=*|--force=*|--yes=*) FORCE="${1#*=}"; shift 1;;
 
-    -*) errror "Unknown option: $1"; exit 1;;
+    -*) error "Unknown option: $1"; exit 1;;
     *) VERSION="$1"; shift 1;;
   esac
 done
