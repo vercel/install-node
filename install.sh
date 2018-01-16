@@ -25,7 +25,7 @@
 #   $ curl -sL install-node.now.sh | sh -s -- -P $HOME -v 8 -V
 #
 # Patches welcome!
-# https://github.com/zeit/install-node
+# https://github.com/zeit/install-node.now.sh
 # Nathan Rajlich <nate@zeit.co>
 
 set -e
