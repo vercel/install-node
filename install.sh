@@ -148,9 +148,8 @@ confirm() {
 check_prefix() {
   local warn=1
   local bin="$1/bin"
-  IFS=':' read -ra PATHS <<<"$(echo "$PATH")"
-  for i in "${PATHS[@]}"; do
-    if [ "${i}" = "${bin}" ]; then
+  for path in $(echo "$PATH" | sed 's/:/ /g'); do
+    if [ "${path}" = "${bin}" ]; then
       warn=0
     fi
   done
