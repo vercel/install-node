@@ -146,15 +146,19 @@ confirm() {
 }
 
 check_prefix() {
-  local warn=1
   local bin="$1/bin"
-  for path in $(echo "$PATH" | sed 's/:/ /g'); do
-    if [ "${path}" = "${bin}" ]; then
-      warn=0
-    fi
-  done
 
-  if [ "${warn}" -eq 1 ]; then
+  # https://stackoverflow.com/a/11655875
+  local good=$( IFS=:
+    for path in $PATH; do
+      if [ "${path}" = "${bin}" ]; then
+        echo 1
+        break
+      fi
+    done
+  )
+
+  if [ "${good}" != "1" ]; then
     warn "Prefix bin directory ${bin} is not in your \$PATH"
   fi
 }
