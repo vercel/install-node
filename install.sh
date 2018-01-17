@@ -106,7 +106,8 @@ detect_platform() {
     fi
   fi
 
-  if [ ${platform:0:5} = "mingw" ]; then
+  # mingw is Git-Bash
+  if echo "${platform}" | grep -i mingw >/dev/null; then
     platform=win
   fi
 
