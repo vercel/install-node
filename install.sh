@@ -116,15 +116,28 @@ detect_platform() {
 
 # Currently known to support:
 #   - x64 (x86_64)
+#   - x86 (i386)
 #   - armv7l (Raspbian on Pi 3)
 detect_arch() {
   local arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
-  if [ "${arch}" = "x86_64" ]; then
-    arch=x64
-  fi
+  if echo "${arch}" | grep -i arm >/dev/null; then
+    # ARM is fine
+    echo "${arch}"
+  else
+    if [ "${arch}" = "i386" ]; then
+      arch=x86
+    elif [ "${arch}" = "x86_64" ]; then
+      arch=x64
+    fi
 
-  echo "${arch}"
+    # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
+    if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+      arch=x86
+    fi
+
+    echo "${arch}"
+  fi
 }
 
 confirm() {
