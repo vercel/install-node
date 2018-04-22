@@ -27,8 +27,7 @@
 # Patches welcome!
 # https://github.com/zeit/install-node.now.sh
 # Nathan Rajlich <nate@zeit.co>
-
-set -e
+set -euo pipefail
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
 GREY="$(tput setaf 0 2>/dev/null || echo '')"
@@ -93,6 +92,7 @@ resolve_node_version() {
 }
 
 # Currently known to support:
+#   - win (Git Bash)
 #   - darwin
 #   - linux
 #   - linux_musl (Alpine)
@@ -117,7 +117,8 @@ detect_platform() {
 # Currently known to support:
 #   - x64 (x86_64)
 #   - x86 (i386)
-#   - armv7l (Raspbian on Pi 3)
+#   - armv6l (Raspbian on Pi 1/Zero)
+#   - armv7l (Raspbian on Pi 2/3)
 detect_arch() {
   local arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
@@ -141,7 +142,7 @@ detect_arch() {
 }
 
 confirm() {
-  if [ -z "${FORCE}" ]; then
+  if [ -z "${FORCE-}" ]; then
     printf "${MAGENTA}?${NO_COLOR} $@ ${BOLD}[yN]${NO_COLOR} "
     set +e
     read yn < /dev/tty
@@ -177,23 +178,23 @@ check_prefix() {
 }
 
 # defaults
-if [ -z "${VERSION}" ]; then
+if [ -z "${VERSION-}" ]; then
   VERSION=latest
 fi
 
-if [ -z "${PLATFORM}" ]; then
+if [ -z "${PLATFORM-}" ]; then
   PLATFORM="$(detect_platform)"
 fi
 
-if [ -z "${PREFIX}" ]; then
+if [ -z "${PREFIX-}" ]; then
   PREFIX=/usr/local
 fi
 
-if [ -z "${ARCH}" ]; then
+if [ -z "${ARCH-}" ]; then
   ARCH="$(detect_arch)"
 fi
 
-if [ -z "${BASE_URL}" ]; then
+if [ -z "${BASE_URL-}" ]; then
   BASE_URL="https://nodejs.org/dist"
 fi
 
@@ -240,9 +241,11 @@ info "${BOLD}Platform${NO_COLOR}: ${GREEN}${PLATFORM}${NO_COLOR}"
 info "${BOLD}Arch${NO_COLOR}:     ${GREEN}${ARCH}${NO_COLOR}"
 
 # non-empty VERBOSE enables verbose untarring
-if [ ! -z "${VERBOSE}" ]; then
+if [ ! -z "${VERBOSE-}" ]; then
   VERBOSE=v
   info "${BOLD}Verbose${NO_COLOR}: yes"
+else
+  VERBOSE=
 fi
 
 echo
