@@ -2,20 +2,13 @@
   "name": "install-node",
   "version": "1.0.0",
   "description": "Node.js one-liner install shell script",
-  "scripts": {
-    "start": "micro server.js"
-  },
   "author": "Nathan Rajlich <nate@zeit.co>",
   "license": "MIT",
   "dependencies": {
     "micro": "^9.0.2"
   },
-  "now": {
-    "type": "npm",
-    "alias": "install-node.now.sh",
-    "files": [
-      "server.js",
-      "install.sh"
-    ]
+  "devDependencies": {
+    "@types/micro": "^7.3.3",
+    "@types/node": "^11.11.4"
   }
 }

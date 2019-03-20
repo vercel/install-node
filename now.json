@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "alias": "install-node.now.sh",
+  "builds": [
+    { "src": "*.ts", "use": "@now/node" }
+  ],
+  "routes": [
+    { "src": "/.*", "dest": "/index.ts" }
+  ]
+}
