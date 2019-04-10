@@ -7,5 +7,5 @@ Simple one-liner shell script that installs official Node.js binaries
 Create `install-node` as an alias!
 
 ```bash
-alias install-node="curl -s https://install-node.now.sh | sh -s --"
+alias install-node="curl -s https://install-node.now.sh | bash -s --"
 ```

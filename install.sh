@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # `install-node.now.sh` is a simple one-liner shell script to
 # install official Node.js binaries from `nodejs.org/dist` or other
 # blessed sources (i.e. Alpine Linux builds are not on nodejs.org)
