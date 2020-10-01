@@ -2,7 +2,7 @@
   "name": "install-node",
   "version": "1.0.0",
   "description": "Node.js one-liner install shell script",
-  "author": "Nathan Rajlich <nate@zeit.co>",
+  "author": "Nathan Rajlich <nate@vercel.com>",
   "license": "MIT",
   "dependencies": {
     "micro": "^9.0.2"
