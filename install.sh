@@ -1,33 +1,33 @@
-#!/bin/bash
-# `install-node.now.sh` is a simple one-liner shell script to
+#!/bin/sh
+# `install-node.vercel.app` is a simple one-liner shell script to
 # install official Node.js binaries from `nodejs.org/dist` or other
-# blessed sources (i.e. Alpine Linux builds are not on nodejs.org)
+# `unofficial-builds.nodejs.org/download/release`.
 #
 # For newest Node.js version:
 #
-#   $ curl -sL install-node.now.sh | sh
+#   $ curl -sL install-node.vercel.app | sh
 
 # For latest LTS Node.js version:
 #
-#   $ curl -sL install-node.now.sh/lts | sh
+#   $ curl -sL install-node.vercel.app/lts | sh
 #
 # Install a specific version (ex: v8.9.0):
 #
-#   $ curl -sL install-node.now.sh/v8.9.0 | sh
+#   $ curl -sL install-node.vercel.app/v8.9.0 | sh
 #
 # Semver also works (ex: v4.x.x):
 #
-#   $ curl -sL install-node.now.sh/4 | sh
+#   $ curl -sL install-node.vercel.app/4 | sh
 #
 # Options may be passed to the shell script with `-s --`:
 #
-#   $ curl -sL install-node.now.sh | sh -s -- --prefix=$HOME --version=8 --verbose
-#   $ curl -sL install-node.now.sh | sh -s -- -P $HOME -v 8 -V
+#   $ curl -sL install-node.vercel.app | sh -s -- --prefix=$HOME --version=8 --verbose
+#   $ curl -sL install-node.vercel.app | sh -s -- -P $HOME -v 8 -V
 #
 # Patches welcome!
-# https://github.com/zeit/install-node.now.sh
-# Nathan Rajlich <nate@zeit.co>
-set -euo pipefail
+# https://github.com/vercel/install-node
+# Nathan Rajlich <nate@vercel.com>
+set -eu
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
 GREY="$(tput setaf 0 2>/dev/null || echo '')"
@@ -60,8 +60,8 @@ fetch() {
   local command
   if hash curl 2>/dev/null; then
     set +e
-    command="curl --silent --fail $1"
-    curl --silent --fail "$1"
+    command="curl -sfLS $1"
+    curl -sfLS -v "$1"
     rc=$?
     set -e
   else
@@ -73,13 +73,13 @@ fetch() {
       set -e
     else
       error "No HTTP download program (curl, wget) found…"
-      exit 1
+      return 1
     fi
   fi
 
   if [ $rc -ne 0 ]; then
     error "Command failed (exit code $rc): ${BLUE}${command}${NO_COLOR}"
-    exit $rc
+    return $rc
   fi
 }
 
@@ -88,7 +88,7 @@ resolve_node_version() {
   if [ "${tag}" = "latest" ]; then
     tag=
   fi
-  fetch "https://resolve-node.now.sh/$tag"
+  fetch "https://resolve-node-git-update-add-platform-arch-filtering.vercel.vercel.app/?tag=$tag&platform=$2&arch=$3"
 }
 
 # Currently known to support:
@@ -150,11 +150,11 @@ confirm() {
     set -e
     if [ $rc -ne 0 ]; then
       error "Error reading from prompt (please re-run with the \`--yes\` option)"
-      exit 1
+      return 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
       error "Aborting (please answer \"yes\" to continue)"
-      exit 1
+      return 1
     fi
   fi
 }
@@ -218,13 +218,13 @@ while [ "$#" -gt 0 ]; do
     -V=*|--verbose=*) VERBOSE="${1#*=}"; shift 1;;
     -f=*|-y=*|--force=*|--yes=*) FORCE="${1#*=}"; shift 1;;
 
-    -*) error "Unknown option: $1"; exit 1;;
+    -*) error "Unknown option: $1"; exit 2;;
     *) VERSION="$1"; shift 1;;
   esac
 done
 
 # Resolve the requested version tag into an existing Node.js version
-RESOLVED="$(resolve_node_version "$VERSION")"
+RESOLVED="$(resolve_node_version "$VERSION" "$PLATFORM" "$ARCH")"
 if [ -z "${RESOLVED}" ]; then
   error "Could not resolve Node.js version ${MAGENTA}${VERSION}${NO_COLOR}"
   exit 1
