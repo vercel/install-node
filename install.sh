@@ -130,6 +130,8 @@ detect_arch() {
       arch=x86
     elif [ "${arch}" = "x86_64" ]; then
       arch=x64
+    elif [ "${arch}" = "aarch64" ]; then
+      arch=arm64
     fi
 
     # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
