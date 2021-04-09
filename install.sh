@@ -5,28 +5,28 @@
 #
 # For newest Node.js version:
 #
-#   $ curl -sL install-node.vercel.app | sh
+#   $ curl -sfLS install-node.vercel.app | sh
 
 # For latest LTS Node.js version:
 #
-#   $ curl -sL install-node.vercel.app/lts | sh
+#   $ curl -sfLS install-node.vercel.app/lts | sh
 #
 # Install a specific version (ex: v8.9.0):
 #
-#   $ curl -sL install-node.vercel.app/v8.9.0 | sh
+#   $ curl -sfLS install-node.vercel.app/v8.9.0 | sh
 #
 # Semver also works (ex: v4.x.x):
 #
-#   $ curl -sL install-node.vercel.app/4 | sh
+#   $ curl -sfLS install-node.vercel.app/4 | sh
 #
 # Options may be passed to the shell script with `-s --`:
 #
-#   $ curl -sL install-node.vercel.app | sh -s -- --prefix=$HOME --version=8 --verbose
-#   $ curl -sL install-node.vercel.app | sh -s -- -P $HOME -v 8 -V
+#   $ curl -sfLS install-node.vercel.app | sh -s -- --prefix=$HOME --version=8 --verbose
+#   $ curl -sfLS install-node.vercel.app | sh -s -- -P $HOME -v 8 -V
 #
 # Patches welcome!
-# https://github.com/zeit/install-node.vercel.app
-# Nathan Rajlich <nate@zeit.co>
+# https://github.com/vercel/install-node.vercel.app
+# Nathan Rajlich <nate@vercel.com>
 set -euo pipefail
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
