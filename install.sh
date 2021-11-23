@@ -1,33 +1,33 @@
-#!/bin/sh
+#!/bin/bash
 # `install-node.vercel.app` is a simple one-liner shell script to
 # install official Node.js binaries from `nodejs.org/dist` or other
 # `unofficial-builds.nodejs.org/download/release`.
 #
 # For newest Node.js version:
 #
-#   $ curl -sL install-node.vercel.app | sh
-
+#   $ curl -sfLS install-node.vercel.app | sh
+#
 # For latest LTS Node.js version:
 #
-#   $ curl -sL install-node.vercel.app/lts | sh
+#   $ curl -sfLS install-node.vercel.app/lts | sh
 #
 # Install a specific version (ex: v8.9.0):
 #
-#   $ curl -sL install-node.vercel.app/v8.9.0 | sh
+#   $ curl -sfLS install-node.vercel.app/v8.9.0 | sh
 #
 # Semver also works (ex: v4.x.x):
 #
-#   $ curl -sL install-node.vercel.app/4 | sh
+#   $ curl -sfLS install-node.vercel.app/4 | sh
 #
 # Options may be passed to the shell script with `-s --`:
 #
-#   $ curl -sL install-node.vercel.app | sh -s -- --prefix=$HOME --version=8 --verbose
-#   $ curl -sL install-node.vercel.app | sh -s -- -P $HOME -v 8 -V
+#   $ curl -sfLS install-node.vercel.app | sh -s -- --prefix=$HOME --version=8 --verbose
+#   $ curl -sfLS install-node.vercel.app | sh -s -- -P $HOME -v 8 -V
 #
 # Patches welcome!
-# https://github.com/vercel/install-node
+# https://github.com/vercel/install-node.vercel.app
 # Nathan Rajlich <nate@vercel.com>
-set -eu
+set -euo pipefail
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
 GREY="$(tput setaf 0 2>/dev/null || echo '')"
@@ -88,7 +88,7 @@ resolve_node_version() {
   if [ "${tag}" = "latest" ]; then
     tag=
   fi
-  fetch "https://resolve-node-git-update-add-platform-arch-filtering.vercel.vercel.app/?tag=$tag&platform=$2&arch=$3"
+  fetch "https://resolve-node.vercel.app/?tag=$tag&platform=$2&arch=$3"
 }
 
 # Currently known to support:
@@ -130,6 +130,8 @@ detect_arch() {
       arch=x86
     elif [ "${arch}" = "x86_64" ]; then
       arch=x64
+    elif [ "${arch}" = "aarch64" ]; then
+      arch=arm64
     fi
 
     # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
