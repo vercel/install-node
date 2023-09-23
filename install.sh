@@ -72,8 +72,10 @@ detect_platform() {
     fi
   fi
 
-  # mingw is Git-Bash
+  # mingw or msys_nt is Git-Bash
   if echo "${platform}" | grep -i mingw >/dev/null; then
+    platform=win
+  elif echo "${platform}" | grep -i msys_nt >/dev/null; then
     platform=win
   fi
 
@@ -188,12 +190,12 @@ done
 
 # Resolve the requested version tag into an existing Node.js version
 HEADERS="$(curl -sfLSI "https://resolve-node.vercel.app/?tag=${VERSION}&platform=${PLATFORM}&arch=${ARCH}")"
-RESOLVED="$(echo "$HEADERS" | grep "x-node-version" | awk 'BEGIN{RS="\r\n";} /^x-node-version/{print $2}')"
-PLATFORM="$(echo "$HEADERS" | grep "x-platform" | awk 'BEGIN{RS="\r\n";} /^x-platform/{print $2}')"
-ARCH="$(echo "$HEADERS" | grep "x-arch" | awk 'BEGIN{RS="\r\n";} /^x-arch/{print $2}')"
+RESOLVED="$(echo "$HEADERS" | grep -i "x-node-version" | awk 'BEGIN{IGNORECASE = 1; RS="\r\n";} /^x-node-version/{print $2}')"
+PLATFORM="$(echo "$HEADERS" | grep -i "x-platform" | awk 'BEGIN{IGNORECASE = 1; RS="\r\n";} /^x-platform/{print $2}')"
+ARCH="$(echo "$HEADERS" | grep -i "x-arch" | awk 'BEGIN{IGNORECASE = 1; RS="\r\n";} /^x-arch/{print $2}')"
 
 if [ -z "${RESOLVED}" ]; then
-  error "Could not resolve Node.js version ${MAGENTA}${RESOLED}${NO_COLOR}"
+  error "Could not resolve Node.js version ${MAGENTA}${RESOLVED}${NO_COLOR}"
   exit 1
 fi
 
@@ -217,7 +219,7 @@ fi
 
 echo
 
-URL="$(echo "$HEADERS" | grep "x-download-url" | awk 'BEGIN{RS="\r\n";} /^x-download-url/{print $2}')"
+URL="$(echo "$HEADERS" | grep -i "x-download-url" | awk 'BEGIN{IGNORECASE = 1; RS="\r\n";} /^x-download-url/{print $2}')"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 check_prefix "${PREFIX}"
 confirm "Install Node.js ${GREEN}${RESOLVED}${NO_COLOR} to ${BOLD}${GREEN}${PREFIX}${NO_COLOR}?"
